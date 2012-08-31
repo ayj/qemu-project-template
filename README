@@ -1,0 +1,11 @@
+1) build the ELF and binary images
+	
+	$ make
+
+2) run the binary image with qemu in 1st terminal
+
+	$ ./script/run
+
+3) attach gdb to qemu in 2nd terminal
+
+	$ ./script/debug
