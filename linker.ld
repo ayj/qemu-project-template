@@ -10,7 +10,7 @@ ENTRY(_start)
 SECTIONS
 {
 	. = 0x10000; 
-	.startup . 	: { start.o(.text) }
+	.startup . 	: { *(._start_section) }
 	.text 		: { *(.text) }
 
 	/* XXX this greatly increases binary size */

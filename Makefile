@@ -7,14 +7,15 @@ NM = $(CROSS_COMPILE)nm
 AS = $(CROSS_COMPILE)as
 OBJCOPY = $(CROSS_COMPILE)objcopy
 
-CFLAGS = -Os -g -Wall -nostdlib -I. -MMD
-LDFLAGS = -T linker.ld
-
-OBJS    = $(patsubst %.c, %.o, $(wildcard *.c))
-OBJS   += $(patsubst %.s, %.o, $(wildcard *.s))
-DEPS	= $(wildcard *.d)
+SRCDIR	= src
+OBJS    = $(patsubst %.c, %.o, $(wildcard $(SRCDIR)/*.c))
+OBJS   += $(patsubst %.s, %.o, $(wildcard $(SRCDIR)/*.s))
+DEPS	= $(wildcard $(SRCDIR)/*.d)
 
 PROGNAME = main
+
+CFLAGS = -Os -g -Wall -nostdlib -I$(SRCDIR) -MMD
+LDFLAGS = -T linker.ld
 
 ifeq ($(V),1)
 	Q=
@@ -49,7 +50,7 @@ nm:
 	$(Q)$(NM) -n -S main
 
 clean:
-	rm -f *.o *.d *.elf *.bin
+	rm -f $(SRCDIR)/*.o $(SRCDIR)/*.d *.elf *.bin
 
 .PHONY: all check nm clean
 
