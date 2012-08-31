@@ -1,6 +1,7 @@
 MAKEFLAGS = --no-print-directory
 
-CROSS_COMPILE = arm-linux-gnueabi-
+# use code sourcery toolchain
+CROSS_COMPILE = arm-none-linux-gnueabi-
 CC = $(CROSS_COMPILE)gcc
 LD = $(CROSS_COMPILE)ld
 NM = $(CROSS_COMPILE)nm
@@ -14,9 +15,9 @@ DEPS	= $(wildcard $(SRCDIR)/*.d)
 
 PROGNAME = main
 
-CFLAGS = -Os -g -Wall -nostdlib -I$(SRCDIR) -MMD -mcpu=arm926ej-s
+CFLAGS	= -Os -g -Wall -nostdlib -I$(SRCDIR) -MMD -mcpu=arm926ej-s
+AFLAGS	= -mcpu=arm926ej-s
 LDFLAGS = -T $(SRCDIR)/linker.ld
-AFLAGS = -mcpu=arm926ej-s
 
 ifeq ($(V),1)
 	Q=
@@ -32,7 +33,7 @@ endif
 
 %.o: %.s
 	@$(NQ) ' AS  ' $@
-	$(Q)$(AS) -o $@ $<
+	$(Q)$(AS) $(AFLAGS) -o $@ $<
 
 all: $(PROGNAME).bin
 
