@@ -10,12 +10,10 @@ ENTRY(_start)
 SECTIONS
 {
 	. = 0x10000; 
-	.startup . 	: { *(._start_section) }
-	.text 		: { *(.text) }
-
-	/* XXX this greatly increases binary size */
-	/* . = 0x20000; */
-	. = ALIGN(8);
+	.text 	: { 
+		*(._start)
+		*(.text) 
+	}
 	.data	: { *(.data) } 
 	.bss 	: { *(.bss) }
 

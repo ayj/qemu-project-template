@@ -46,9 +46,6 @@ $(PROGNAME).bin: $(PROGNAME).elf
 check:
 	$(Q)$(MAKE) all CC="REAL_CC=$(CC) CHECK=\"sparse -Wall\" cgcc"
 
-nm:
-	$(Q)$(NM) -n -S main
-
 clean:
 	rm -f $(SRCDIR)/*.o $(SRCDIR)/*.d *.elf *.bin
 

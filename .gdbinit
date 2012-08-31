@@ -9,5 +9,5 @@ define t_asm_regs
 end
 
 target remote localhost:2345
-
-
+add-symbol-file main.elf 0x10000
+ 
