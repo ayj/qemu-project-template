@@ -13,7 +13,7 @@ void run(void)
     g_counter = update_counter(g_counter);
 }
 
-void __attribute__ ((section(".init.entry"))) _start(void)
+void _main(void)
 {
     one_reset();
     two_reset();

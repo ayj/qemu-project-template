@@ -9,14 +9,19 @@ ENTRY(_start)
 
 SECTIONS
 {
-	.text 0x10000 : 
-	{ 
-		*(.init.*) 
-		*(.text) 
-	}
+	. = 0x10000; 
+	.startup . 	: { start.o(.text) }
+	.text 		: { *(.text) }
 
-	. = 0x8000000;
+	/* XXX this greatly increases binary size */
+	/* . = 0x20000; */
+	. = ALIGN(8);
 	.data	: { *(.data) } 
 	.bss 	: { *(.bss) }
+
+ 	/* 4k of stack memory */
+	. = ALIGN(8);
+	. = . + 0x1000;
+	stack_top = .;
 }
 

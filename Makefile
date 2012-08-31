@@ -1,17 +1,20 @@
 MAKEFLAGS = --no-print-directory
 
-CC = arm-linux-gnueabi-gcc
-LD = arm-linux-gnueabi-ld
-NM = arm-linux-gnueabi-nm
-QEMU = qemu-arm
+CROSS_COMPILE = arm-linux-gnueabi-
+CC = $(CROSS_COMPILE)gcc
+LD = $(CROSS_COMPILE)ld
+NM = $(CROSS_COMPILE)nm
+AS = $(CROSS_COMPILE)as
+OBJCOPY = $(CROSS_COMPILE)objcopy
 
 CFLAGS = -Os -g -Wall -nostdlib -I. -MMD
 LDFLAGS = -T linker.ld
 
-OBJDIR	= .
-SRCS    = $(wildcard *.c)
-OBJS    = $(patsubst %.c,$(OBJDIR)/%.o,$(SRCS))
+OBJS    = $(patsubst %.c, %.o, $(wildcard *.c))
+OBJS   += $(patsubst %.s, %.o, $(wildcard *.s))
 DEPS	= $(wildcard *.d)
+
+PROGNAME = main
 
 ifeq ($(V),1)
 	Q=
@@ -21,13 +24,23 @@ else
 	NQ=echo
 endif
 
-$(OBJDIR)/%.o:   %.c
+%.o: %.c
 	@$(NQ) ' CC  ' $@
 	$(Q)$(CC) $(CFLAGS) -c -o $@ $<
 
-all:	$(OBJS) 
-	@$(NQ) ' LD  ' main
-	$(Q)$(LD) $(LDFLAGS) $(OBJS) -o main
+%.o: %.s
+	@$(NQ) ' AS  ' $@
+	$(Q)$(AS) -o $@ $<
+
+all: $(PROGNAME).bin
+
+$(PROGNAME).elf: $(OBJS) 
+	@$(NQ) ' LD  ' $(PROGNAME).elf
+	$(Q)$(LD) $(LDFLAGS) $(OBJS) -o $(PROGNAME).elf
+
+$(PROGNAME).bin: $(PROGNAME).elf
+	@$(NQ) ' BIN ' $(PROGNAME).bin
+	$(Q)$(OBJCOPY) -O binary $(PROGNAME).elf $(PROGNAME).bin
 
 check:
 	$(Q)$(MAKE) all CC="REAL_CC=$(CC) CHECK=\"sparse -Wall\" cgcc"
@@ -36,10 +49,7 @@ nm:
 	$(Q)$(NM) -n -S main
 
 clean:
-	rm -f $(OBJDIR)/*.o *.d main 
-
-run:
-	$(QEMU) main
+	rm -f *.o *.d *.elf *.bin
 
 .PHONY: all check nm clean
 
