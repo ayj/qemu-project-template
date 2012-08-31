@@ -1,5 +1,4 @@
-#include <inttypes.h>
-#include <stdbool.h>
+#include <common.h>
 
 bool g_running = true;
 uint32_t g_counter = 0;
@@ -16,6 +15,11 @@ void run(void)
 
 void __attribute__ ((section(".init.entry"))) _start(void)
 {
+    one_reset();
+    two_reset();
+    three_reset();
+    four_reset();
+
     while (g_running) {
         run();
     }

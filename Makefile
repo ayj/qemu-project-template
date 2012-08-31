@@ -5,10 +5,13 @@ LD = arm-linux-gnueabi-ld
 NM = arm-linux-gnueabi-nm
 QEMU = qemu-arm
 
-CFLAGS = -Os -g -Wall -nostdlib
+CFLAGS = -Os -g -Wall -nostdlib -I. -MMD
 LDFLAGS = -T linker.ld
 
-OBJS = main.o
+OBJDIR	= .
+SRCS    = $(wildcard *.c)
+OBJS    = $(patsubst %.c,$(OBJDIR)/%.o,$(SRCS))
+DEPS	= $(wildcard *.d)
 
 ifeq ($(V),1)
 	Q=
@@ -18,11 +21,11 @@ else
 	NQ=echo
 endif
 
-%.o:	%.c 
+$(OBJDIR)/%.o:   %.c
 	@$(NQ) ' CC  ' $@
 	$(Q)$(CC) $(CFLAGS) -c -o $@ $<
 
-all:	$(OBJS)
+all:	$(OBJS) 
 	@$(NQ) ' LD  ' main
 	$(Q)$(LD) $(LDFLAGS) $(OBJS) -o main
 
@@ -33,7 +36,11 @@ nm:
 	$(Q)$(NM) -n -S main
 
 clean:
-	rm -f *.o main
+	rm -f $(OBJDIR)/*.o *.d main 
 
 run:
 	$(QEMU) main
+
+.PHONY: all check nm clean
+
+-include $(OBJS:%.o=%.d)
