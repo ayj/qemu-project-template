@@ -14,7 +14,7 @@ void run(void)
     g_counter = update_counter(g_counter);
 }
 
-void _start(void)
+void __attribute__ ((section(".init.entry"))) _start(void)
 {
     while (g_running) {
         run();
