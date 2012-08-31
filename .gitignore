@@ -3,3 +3,5 @@ main
 *.d
 *.elf
 *.bin
+cscope.out
+tags
