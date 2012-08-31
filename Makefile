@@ -1,11 +1,13 @@
+MAKEFLAGS = --no-print-directory
+
 CC = arm-linux-gnueabi-gcc
-LD =  rm-linux-gnueabi-ld
+LD = arm-linux-gnueabi-ld
+QEMU = qemu-arm
 
 CFLAGS = -Os -g -Wall -nostdlib
-LDFLAGS = 
+LDFLAGS = -T linker.ld
 
 OBJS = main.o
-LIBs =
 
 ifeq ($(V),1)
 	Q=
@@ -20,11 +22,14 @@ endif
 	$(Q)$(CC) $(CFLAGS) -c -o $@ $<
 
 all:	$(OBJS)
-	@$(NQ) ' CC  ' main
-	$(Q)$(CC) $(LDFLAGS) $(OBJS) $(LIBS) -o main
+	@$(NQ) ' LD  ' main
+	$(Q)$(LD) $(LDFLAGS) $(OBJS) -o main
 
 check:
 	$(Q)$(MAKE) all CC="REAL_CC=$(CC) CHECK=\"sparse -Wall\" cgcc"
 
 clean:
 	rm -f *.o main
+
+run:
+	$(QEMU) main

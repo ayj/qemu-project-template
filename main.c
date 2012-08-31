@@ -6,7 +6,7 @@ void run(void)
     
 }
 
-int main(int argc, const char *argv[])
+void _start(void)
 {
     while (true) {
         run();
