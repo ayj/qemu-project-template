@@ -2,6 +2,7 @@ MAKEFLAGS = --no-print-directory
 
 CC = arm-linux-gnueabi-gcc
 LD = arm-linux-gnueabi-ld
+NM = arm-linux-gnueabi-nm
 QEMU = qemu-arm
 
 CFLAGS = -Os -g -Wall -nostdlib
@@ -27,6 +28,9 @@ all:	$(OBJS)
 
 check:
 	$(Q)$(MAKE) all CC="REAL_CC=$(CC) CHECK=\"sparse -Wall\" cgcc"
+
+nm:
+	$(Q)$(NM) -n -S main
 
 clean:
 	rm -f *.o main
