@@ -15,7 +15,7 @@ DEPS	= $(wildcard $(SRCDIR)/*.d)
 PROGNAME = main
 
 CFLAGS = -Os -g -Wall -nostdlib -I$(SRCDIR) -MMD
-LDFLAGS = -T linker.ld
+LDFLAGS = -T $(SRCDIR)/linker.ld
 
 ifeq ($(V),1)
 	Q=
