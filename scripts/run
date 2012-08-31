@@ -1,3 +1,8 @@
 #!/bin/bash
 
-qemu-system-arm -kernel main.bin -display none -gdb tcp::2345
+qemu-system-arm \
+	-kernel main.bin \
+	-M versatilepb \
+	-m 128M \
+	-nographic \
+	-gdb tcp::2345

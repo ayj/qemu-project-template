@@ -14,8 +14,9 @@ DEPS	= $(wildcard $(SRCDIR)/*.d)
 
 PROGNAME = main
 
-CFLAGS = -Os -g -Wall -nostdlib -I$(SRCDIR) -MMD
+CFLAGS = -Os -g -Wall -nostdlib -I$(SRCDIR) -MMD -mcpu=arm926ej-s
 LDFLAGS = -T $(SRCDIR)/linker.ld
+AFLAGS = -mcpu=arm926ej-s
 
 ifeq ($(V),1)
 	Q=
