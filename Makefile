@@ -48,8 +48,16 @@ $(PROGNAME).bin: $(PROGNAME).elf
 check:
 	$(Q)$(MAKE) all CC="REAL_CC=$(CC) CHECK=\"sparse -Wall\" cgcc"
 
+tags:
+	@$(NQ) ' TAGS  '
+	$(Q) ctags -R $(SRCDIR)/
+
+cscope:
+	@$(NQ) ' CSCOPE'
+	$(Q) cscope -bR $(SRCDIR)/*
+
 clean:
-	rm -f $(SRCDIR)/*.o $(SRCDIR)/*.d *.elf *.bin
+	rm -f $(SRCDIR)/*.o $(SRCDIR)/*.d *.elf *.bin tags cscope.*
 
 .PHONY: all check nm clean
 
