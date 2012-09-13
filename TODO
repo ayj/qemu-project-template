@@ -1,0 +1,8 @@
+* add basic utilities based on u-boot implementation
+	- register read / write
+	- udelay, mdelay, delay
+	- reset sequence
+	- uart / print
+* recursive makefile
+* kconfig
+* dynamic linker
